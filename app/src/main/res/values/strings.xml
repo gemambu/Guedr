@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Guedr</string>
-    <string name="hello_world">holitaaaa!</string>
+    <string name="greeting">holitaaaa!</string>
+    <string name="offline_description">Imagen que representa el tiempo cuando no hay internet</string>
+    <string name="stone_button">sistema piedra</string>
+    <string name="donkey_button">sistema burro</string>
 </resources>
