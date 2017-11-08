@@ -1,4 +1,4 @@
-package com.gmb.guedr
+package com.gmb.guedr.fragment
 
 import android.app.Activity
 import android.app.Fragment
@@ -10,19 +10,42 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_forecast.*
-import kotlinx.android.synthetic.main.fragment_forecast.*
+import com.gmb.guedr.model.Forecast
+import com.gmb.guedr.PREFERENCE_SHOW_CELSIUS
+import com.gmb.guedr.R
+import com.gmb.guedr.activity.SettingsActivity
+import com.gmb.guedr.model.City
+import org.w3c.dom.Text
 
 
 class ForecastFragment : Fragment() {
 
     companion object {
         var REQUEST_UUNITS = 1
+        private val ARG_CITY = "ARG_CITY"
+
+        fun newInstance(city: City) : ForecastFragment {
+            val fragment = ForecastFragment()
+
+            val arguments = Bundle()
+            arguments.putSerializable(ARG_CITY, city)
+            fragment.arguments = arguments
+
+            return fragment
+        }
     }
 
     lateinit var root: View
     lateinit var maxTemp: TextView
     lateinit var minTemp: TextView
+
+    var city: City? = null
+        set(value) {
+            if (value != null) {
+                root.findViewById<TextView>(R.id.city).text = value.name
+                forecast = value.forecast
+            }
+        }
 
     var forecast: Forecast? = null
         set(value) {
@@ -59,7 +82,9 @@ class ForecastFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         inflater?.let {
             root = it.inflate(R.layout.fragment_forecast, container, false)
-            forecast = Forecast(25f, 10f, 35f, "Soleado con alguna nube", R.drawable.ico_01)
+            if (arguments != null) {
+                city = arguments.getSerializable(ARG_CITY) as City?
+            }
         }
 
         return root
@@ -133,6 +158,14 @@ class ForecastFragment : Fragment() {
         }
     }
 
+    // para saber si estando en un viewpager por ejemplo, debemos refrescar las unidades
+    // de las temperaturas. Es algo asi como el viewWillAppear de los fragment
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser && forecast != null) {
+            updateTemperature()
+        }
+    }
 
     private fun updateTemperature() {
         val units = temperatureUnits()

@@ -1,10 +1,12 @@
-package com.gmb.guedr
+package com.gmb.guedr.model
+
+import java.io.Serializable
 
 data class Forecast(val maxTemp: Float,
                val minTemp: Float,
                val humidity: Float,
                val description: String,
-               val icon: Int) {
+               val icon: Int) : Serializable {
     enum class TempUnit {
         CELSIUS,
         FAHRENHEIT
