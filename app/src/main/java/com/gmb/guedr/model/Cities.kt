@@ -5,9 +5,9 @@ import java.io.Serializable
 
 object Cities : Serializable{
     private var cities: List<City> = listOf(
-            City("Madrid", Forecast(25f, 10f, 35f, "Soleado con alguna nube", R.drawable.ico_01)),
-            City("Jaén", Forecast(36f, 12f, 19f, "Sol a tope", R.drawable.ico_01)),
-            City("Quito", Forecast(30f, 15f, 40f, "Arcoiris", R.drawable.ico_10))
+            City("Madrid"),
+            City("Jaén"),
+            City("Quito")
     )
 
     val count
