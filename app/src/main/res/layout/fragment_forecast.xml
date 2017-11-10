@@ -1,79 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_switcher"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/default_margin">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/city"
+    <ProgressBar
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        tools:text="Madrid"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/default_margin"
+        android:indeterminate="true" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_margin">
 
-    <ImageView
-        android:id="@+id/forecast_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/city"
-        android:layout_marginRight="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:contentDescription="@string/forectast_image_description"
-        app:srcCompat="@drawable/ico_02" />
-
-    <TextView
-        android:id="@+id/forecast_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/forecast_image"
-        android:layout_marginTop="@dimen/default_margin"
-        tools:text="Aqui va el texto de la descripcion" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/forecast_description"
-        android:layout_below="@id/city"
-        android:layout_toRightOf="@+id/forecast_image"
-        android:layout_toEndOf="@id/forecast_image"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:orientation="vertical">
         <TextView
-            android:id="@+id/max_temp"
+            android:id="@+id/city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small_margin"
-            tools:text="Temperatura máxima: 25º C"/>
-        <TextView
-            android:id="@+id/min_temp"
-            android:layout_width="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            tools:text="Madrid" />
+
+
+        <ImageView
+            android:id="@+id/forecast_image"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small_margin"
-            tools:text="Temperatura mínima: 10º C"/>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/city"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
+            android:contentDescription="@string/forectast_image_description"
+            app:srcCompat="@drawable/ico_02" />
+
         <TextView
-            android:id="@+id/humidity"
-            android:layout_width="match_parent"
+            android:id="@+id/forecast_description"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small_margin"
-            tools:text="Humedad: 50 %"/>
-    </LinearLayout>
-</RelativeLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/forecast_image"
+            android:layout_marginTop="@dimen/default_margin"
+            tools:text="Aqui va el texto de la descripcion" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/forecast_description"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/city"
+            android:layout_toEndOf="@id/forecast_image"
+            android:layout_toRightOf="@+id/forecast_image"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/max_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small_margin"
+                tools:text="Temperatura máxima: 25º C" />
+
+            <TextView
+                android:id="@+id/min_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small_margin"
+                tools:text="Temperatura mínima: 10º C" />
+
+            <TextView
+                android:id="@+id/humidity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small_margin"
+                tools:text="Humedad: 50 %" />
+        </LinearLayout>
+    </RelativeLayout>
+</ViewSwitcher>
+
+
 
 
 

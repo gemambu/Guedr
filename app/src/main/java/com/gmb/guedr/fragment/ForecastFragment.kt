@@ -1,6 +1,7 @@
 package com.gmb.guedr.fragment
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.Fragment
 import android.content.Intent
 import android.os.AsyncTask
@@ -11,10 +12,12 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.ViewSwitcher
 import com.gmb.guedr.CONSTANT_OWM_APIKEY
 import com.gmb.guedr.model.Forecast
 import com.gmb.guedr.PREFERENCE_SHOW_CELSIUS
 import com.gmb.guedr.R
+import com.gmb.guedr.VIEW_INDEX
 import com.gmb.guedr.activity.SettingsActivity
 import com.gmb.guedr.model.City
 import kotlinx.coroutines.experimental.Deferred
@@ -48,6 +51,7 @@ class ForecastFragment : Fragment() {
     lateinit var root: View
     lateinit var maxTemp: TextView
     lateinit var minTemp: TextView
+    lateinit var viewSwitcher: ViewSwitcher
 
     var city: City? = null
 
@@ -82,6 +86,9 @@ class ForecastFragment : Fragment() {
 
                 val humidityString = getString(R.string.humidity_format, value.humidity)
                 humidity.text = humidityString
+
+                viewSwitcher.displayedChild = VIEW_INDEX.FORECAST.index
+                city?.forecast = value // super caché
             } else {
                 updateForecast()
             }
@@ -89,12 +96,28 @@ class ForecastFragment : Fragment() {
         }
 
     private fun updateForecast() {
+        viewSwitcher.displayedChild = VIEW_INDEX.LOADING.index
         async(UI){
             val newForecast: Deferred<Forecast?> = bg {
                 downloadForecast(city)
             }
 
-            forecast = newForecast.await()
+            val downloadedForecast = newForecast.await()
+            if (downloadedForecast != null){
+                // Tó ha ido bien, se lo asigno al atributo forecast
+                forecast = downloadedForecast
+            } else {
+                // ha pasado algo
+                AlertDialog.Builder(activity)
+                        .setTitle("Error")
+                        .setMessage("No se ha podido descargar la información del tiempo")
+                        .setPositiveButton(getString(R.string.retry_download),  { dialog, _ ->
+                            dialog.dismiss()
+                            updateForecast()
+                        })
+                        .setNegativeButton(getString(R.string.cancel_download), { _, _ -> activity.finish() })
+                        .show()
+            }
         }
 
 
@@ -103,7 +126,7 @@ class ForecastFragment : Fragment() {
     fun downloadForecast(city: City?): Forecast? {
         try {
             // descargamos la info del tiempo a saco
-            val url = URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=${city?.name}&lang=sp&units=metric&appid=${CONSTANT_OWM_APIKEY}")
+            val url = URL("ahttps://api.openweathermap.org/data/2.5/forecast/daily?q=${city?.name}&lang=sp&units=metric&appid=${CONSTANT_OWM_APIKEY}")
             val jsonString = Scanner(url.openStream(), "UTF-8").useDelimiter("\\A").next()
 
             val jsonRoot = JSONObject(jsonString.toString())
@@ -130,6 +153,8 @@ class ForecastFragment : Fragment() {
                 else -> R.drawable.ico_01
             }
 
+            Thread.sleep(5000)
+
             return Forecast(max, min, humidity, description, iconResource)
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -146,6 +171,9 @@ class ForecastFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         inflater?.let {
             root = it.inflate(R.layout.fragment_forecast, container, false)
+            viewSwitcher = root.findViewById(R.id.view_switcher)
+            viewSwitcher.setInAnimation(activity, android.R.anim.fade_in)
+            viewSwitcher.setInAnimation(activity, android.R.anim.fade_out)
             if (arguments != null) {
                 city = arguments.getSerializable(ARG_CITY) as City?
             }
